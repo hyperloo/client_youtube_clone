@@ -9,13 +9,13 @@ class StreamShow extends React.Component {
     this.props.fetchStream(this.props.match.params.id);
   }
 
-  renderAdmin = stream => {
+  renderAdmin = (stream) => {
     if (
       stream.userId === this.props.currentUserId &&
       this.props.currentUserId !== null
     ) {
       return (
-        <div className="right floated content">
+        <div className="right floated content" style={{ marginTop: "7px" }}>
           <Link to={`/streams/edit/${stream.id}`} className="ui button primary">
             <i className="edit outline icon"></i>Edit
           </Link>
@@ -36,12 +36,28 @@ class StreamShow extends React.Component {
     // state in store which is then passed to mapStateToProps() which then passes it as a prop to the class
     return (
       <div style={{ margin: "auto 25px", marginBottom: "50px" }}>
-        <iframe
-          style={{ width: "100%", height: "600px", marginBottom: "20px" }}
-          src={`${this.props.stream.video}`}
-          frameBorder={"0"}
-          title={`${this.props.stream.video}`}
-        ></iframe>
+        <div
+          style={{
+            position: "relative",
+            width: "100%",
+            paddingBottom: "56.25%",
+            height: "0",
+          }}
+        >
+          <iframe
+            style={{
+              position: "absolute",
+              top: "0",
+              left: "0",
+              width: "100%",
+              height: "100%",
+            }}
+            src={`${this.props.stream.video}`}
+            frameBorder={"0"}
+            title={`${this.props.stream.video}`}
+            allowFullScreen
+          ></iframe>
+        </div>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <div>
             <h1 style={{ marginBottom: "0px" }}>{this.props.stream.title}</h1>
@@ -87,7 +103,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     stream: state.streams[ownProps.match.params.id],
     currentUserId: state.auth.userId,
-    isSignedIn: state.auth.isSignedIn
+    isSignedIn: state.auth.isSignedIn,
   };
 };
 export default connect(mapStateToProps, { fetchStream })(StreamShow);
